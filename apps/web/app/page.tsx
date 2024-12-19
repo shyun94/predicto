@@ -3,7 +3,7 @@ import { useShape } from "@electric-sql/react";
 
 function Component() {
   const { data } = useShape({
-    url: `http://localhost:3001/v1/shape`,
+    url: `http://localhost:3000/shape-proxy`,
     params: {
       table: `foo`,
     },
