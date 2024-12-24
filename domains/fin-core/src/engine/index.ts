@@ -26,8 +26,8 @@ export default class FinFormulaTableManager {
     this.finRowsSheetId = finRowsSheetId;
     this.finDriversSheetId = finDriversSheetId;
     this.finDriversSheetName = finDriversSheetName;
-    this.startYearMonth = finDriverBasedModel.timeRange.startYearMonth;
-    this.endYearMonth = finDriverBasedModel.timeRange.endYearMonth;
+    this.startYearMonth = finDriverBasedModel.timeRange[0];
+    this.endYearMonth = finDriverBasedModel.timeRange[1];
     this.columnHeaders = this.getColumnHeaders();
   }
 

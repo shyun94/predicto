@@ -1,7 +1,5 @@
 /** @description yyyy-mm */
 export type YearMonth = string;
 
-export interface TimeRange {
-  startYearMonth: YearMonth;
-  endYearMonth: YearMonth;
-}
+/** @description [start, end] */
+export type TimeRange = [YearMonth, YearMonth];

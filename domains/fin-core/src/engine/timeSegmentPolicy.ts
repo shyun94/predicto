@@ -17,12 +17,6 @@ export class TimeSegmentPolicy {
       const isIncludeInTimeSegment =
         !dayjs(currentYearMonth).isBefore(ts.timeRange.startYearMonth) &&
         !dayjs(currentYearMonth).isAfter(ts.timeRange.endYearMonth);
-      // getYearMonthUtil(currentYearMonth).isSameOrAfter(
-      //   ts.timeRange.startYearMonth
-      // ) &&
-      // getYearMonthUtil(currentYearMonth).isSameOrBefore(
-      //   ts.timeRange.endYearMonth
-      // );
 
       return isIncludeInTimeSegment;
     });
