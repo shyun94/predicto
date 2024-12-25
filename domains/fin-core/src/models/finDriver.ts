@@ -5,6 +5,6 @@ export interface FinDriver {
   name: string;
   value: string;
   format: Format;
-  driverBasedModelId: string;
+  modelId: string;
   order: number;
 }

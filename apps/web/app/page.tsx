@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FinDriver, FinModel, FinRow } from "@repo/fin-core";
 import { v4 as uuidv4 } from "uuid";
+import { FinFormulaTableManager } from "@repo/fin-core";
 
 export default function MainPage() {
   const [model, setModel] = useState<FinModel>({
@@ -12,6 +13,22 @@ export default function MainPage() {
   });
   const [drivers, setDrivers] = useState<FinDriver[]>([]);
   const [rows, setRows] = useState<FinRow[]>([]);
+
+  const [cellValues, setCellValues] = useState<string[][]>([]);
+
+  const finFormulaManager = useMemo(() => {
+    return new FinFormulaTableManager(model);
+  }, [model]);
+
+  useEffect(() => {
+    finFormulaManager.setFinContents({
+      rows,
+      drivers,
+    });
+
+    setCellValues(finFormulaManager.getCellValues());
+    // setAppliedTimeSegmentIds(finFormulaManager.getAppliedTimeSegmentIds(rows));
+  }, [drivers, finFormulaManager, rows]);
 
   return (
     <div>
@@ -25,7 +42,7 @@ export default function MainPage() {
                 name: "",
                 value: Math.random().toString(),
                 format: { type: "number" },
-                driverBasedModelId: "1",
+                modelId: model.id,
                 order: prev.length,
               },
             ])
@@ -35,7 +52,10 @@ export default function MainPage() {
         </button>
         <button
           onClick={() =>
-            setRows((prev) => [...prev, makeRandomRow(drivers, prev.length)])
+            setRows((prev) => [
+              ...prev,
+              makeRandomRow(drivers, model.id, prev.length),
+            ])
           }
         >
           add row
@@ -56,24 +76,33 @@ export default function MainPage() {
         rows
         <pre>{JSON.stringify(rows, null, 2)}</pre>
       </div>
+
+      <div>
+        cell values
+        <pre>{JSON.stringify(cellValues, null, 2)}</pre>
+      </div>
     </div>
   );
 }
 
-const makeRandomRow = (drivers: FinDriver[], index: number): FinRow => {
+const makeRandomRow = (
+  drivers: FinDriver[],
+  modelId: string,
+  index: number
+): FinRow => {
   const id = uuidv4();
   return {
     id,
     name: "",
     order: index,
     format: { type: "number" },
-    finModelId: "1",
+    modelId: modelId,
     timeSegments: [
       {
         id: uuidv4(),
         formula: "1",
         timeRange: ["2025-01", "2025-12"],
-        rowId: index.toString(),
+        rowId: id,
         order: 0,
       },
       {
@@ -82,7 +111,7 @@ const makeRandomRow = (drivers: FinDriver[], index: number): FinRow => {
           ? `={{${drivers[0]?.id}, x}} + {{${id}, x-1}}`
           : "1",
         timeRange: ["2025-01", "2025-12"],
-        rowId: index.toString(),
+        rowId: id,
         order: 1,
       },
     ],

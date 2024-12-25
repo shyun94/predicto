@@ -15,8 +15,10 @@ export class TimeSegmentPolicy {
   ): FinTimeSegment | null => {
     const timeSegment = findLast(finRow.timeSegments, (ts) => {
       const isIncludeInTimeSegment =
-        !dayjs(currentYearMonth).isBefore(ts.timeRange.startYearMonth) &&
-        !dayjs(currentYearMonth).isAfter(ts.timeRange.endYearMonth);
+        (dayjs(currentYearMonth).isSame(ts.timeRange[0]) ||
+          dayjs(currentYearMonth).isAfter(ts.timeRange[0])) &&
+        (dayjs(currentYearMonth).isSame(ts.timeRange[1]) ||
+          dayjs(currentYearMonth).isBefore(ts.timeRange[1]));
 
       return isIncludeInTimeSegment;
     });

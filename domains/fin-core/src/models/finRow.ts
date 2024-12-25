@@ -6,6 +6,6 @@ export type FinRow = {
   name: string;
   order: number;
   format: Format;
-  finModelId: string;
+  modelId: string;
   timeSegments: FinTimeSegment[];
 };

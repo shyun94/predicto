@@ -1,4 +1,4 @@
-import type { FinContents } from "./";
+import type { FinContents } from "./finFormulaTableManager";
 import type { FinRow } from "../models/finRow";
 import type { FinDriver } from "../models/finDriver";
 import finFormulaPolicy from "./finFormulaPolicy";
@@ -28,12 +28,12 @@ class FinFormulaConverter {
   private convertWithRegex(
     formula: string,
     colIndex: number,
-    { finRows, finDrivers }: FinContents,
+    { rows, drivers }: FinContents,
     finDriversSheetName: string
   ): string {
     return this.convertDriversWithRegex(
-      this.convertRowsWithRegex(formula, colIndex, finRows),
-      finDrivers,
+      this.convertRowsWithRegex(formula, colIndex, rows),
+      drivers,
       finDriversSheetName
     );
   }
@@ -41,7 +41,7 @@ class FinFormulaConverter {
   private convertRowsWithRegex(
     formula: string,
     colIndex: number,
-    finRows: FinRow[]
+    rows: FinRow[]
   ) {
     let newFormula = formula;
     while (finFormulaPolicy.canExtractRowInfoFrom(newFormula)) {
@@ -51,7 +51,7 @@ class FinFormulaConverter {
       const newCell = `${this.getColumnStringByOffset(
         colIndex,
         offsetString
-      )}${this.getRowString(rowId, finRows)}`;
+      )}${this.getRowString(rowId, rows)}`;
 
       newFormula = newFormula.replace(fullMatch, newCell);
     }
@@ -60,10 +60,10 @@ class FinFormulaConverter {
 
   private convertDriversWithRegex(
     formula: string,
-    finDrivers: FinDriver[],
-    finDriversSheetName: string
+    drivers: FinDriver[],
+    driversSheetName: string
   ) {
-    const preAddress = `'${finDriversSheetName}'!`;
+    const preAddress = `'${driversSheetName}'!`;
 
     let newFormula = formula;
     while (finFormulaPolicy.canExtractDriverInfoFrom(newFormula)) {
@@ -71,7 +71,7 @@ class FinFormulaConverter {
         finFormulaPolicy.extractDriverInfoFrom(newFormula);
 
       const newCell = `${preAddress}A${
-        finDrivers.findIndex((driver) => driver.id === driverId) + 1
+        drivers.findIndex((driver) => driver.id === driverId) + 1
       }`;
 
       newFormula = newFormula.replace(fullMatch, newCell);
