@@ -107,9 +107,7 @@ const makeRandomRow = (
       },
       {
         id: uuidv4(),
-        formula: drivers[0]
-          ? `={{${drivers[0]?.id}, x}} + {{${id}, x-1}}`
-          : "1",
+        formula: drivers[0] ? `={{${drivers[0]?.id}}} + {{${id},x-1}}` : "1",
         timeRange: ["2025-01", "2025-12"],
         rowId: id,
         order: 1,

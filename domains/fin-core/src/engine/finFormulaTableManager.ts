@@ -86,8 +86,6 @@ export class FinFormulaTableManager {
       )
     );
 
-    console.log({ result });
-
     return result;
   }
 
