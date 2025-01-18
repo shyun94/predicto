@@ -4,3 +4,4 @@ export * from "./finRow";
 export * from "./finTimeSegment";
 export * from "./finModel";
 export * from "./format";
+export * from "./timeRange";

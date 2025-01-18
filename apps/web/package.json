@@ -13,6 +13,7 @@
   "dependencies": {
     "@electric-sql/react": "1.0.0-beta.1",
     "@repo/fin-core": "workspace:*",
+    "@repo/fin-predict": "workspace:*",
     "@repo/ui": "workspace:*",
     "next": "^15.1.0",
     "react": "^19.0.0",

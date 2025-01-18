@@ -1,8 +1,8 @@
-import dayjs = require("dayjs");
+import dayjs from "dayjs";
 import type { FinRow } from "../models/finRow";
 import type { FinTimeSegment } from "../models/finTimeSegment";
 import type { YearMonth } from "../models/timeRange";
-import { findLast } from "lodash-es";
+import { last } from "es-toolkit";
 
 export class TimeSegmentPolicy {
   /**
@@ -13,15 +13,17 @@ export class TimeSegmentPolicy {
     finRow: FinRow,
     currentYearMonth: YearMonth
   ): FinTimeSegment | null => {
-    const timeSegment = findLast(finRow.timeSegments, (ts) => {
-      const isIncludeInTimeSegment =
-        (dayjs(currentYearMonth).isSame(ts.timeRange[0]) ||
-          dayjs(currentYearMonth).isAfter(ts.timeRange[0])) &&
-        (dayjs(currentYearMonth).isSame(ts.timeRange[1]) ||
-          dayjs(currentYearMonth).isBefore(ts.timeRange[1]));
+    const timeSegment = last(
+      finRow.timeSegments.filter((ts) => {
+        const isIncludeInTimeSegment =
+          (dayjs(currentYearMonth).isSame(ts.timeRange[0]) ||
+            dayjs(currentYearMonth).isAfter(ts.timeRange[0])) &&
+          (dayjs(currentYearMonth).isSame(ts.timeRange[1]) ||
+            dayjs(currentYearMonth).isBefore(ts.timeRange[1]));
 
-      return isIncludeInTimeSegment;
-    });
+        return isIncludeInTimeSegment;
+      })
+    );
 
     return timeSegment ?? null;
   };

@@ -1,5 +1,5 @@
 {
-  "name": "@repo/fin-core",
+  "name": "@repo/fin-predict",
   "version": "0.0.0",
   "type": "module",
   "private": true,
@@ -14,6 +14,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/fin-core": "workspace:*",
     "@turbo/gen": "^1.12.4",
     "@types/node": "^20.11.24",
     "@types/react": "18.3.0",

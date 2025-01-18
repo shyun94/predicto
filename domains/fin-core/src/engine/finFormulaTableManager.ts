@@ -5,7 +5,7 @@ import type { FinModel } from "../models/finModel";
 import timeSegmentPolicy from "./timeSegmentPolicy";
 import type { FinDriver } from "../models/finDriver";
 import type { YearMonth } from "../models/timeRange";
-import dayjs = require("dayjs");
+import dayjs from "dayjs";
 
 export type FinContents = { rows: FinRow[]; drivers: FinDriver[] };
 
