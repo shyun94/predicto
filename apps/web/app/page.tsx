@@ -1,137 +1,56 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { FinDriver, FinModel, FinRow } from "@repo/fin-core";
-import { v4 as uuidv4 } from "uuid";
-import { FinFormulaTableManager } from "@repo/fin-core";
+import {
+  AppShell,
+  Flex,
+  NumberFormatter,
+  NumberInput,
+  Space,
+  Stack,
+  Title,
+} from "@mantine/core";
+import CollapsibleAssetContainer from "../components/CollapsibleAssetContainer";
+import TimeDepositForm from "../components/TimeDepositForm";
+import { useState } from "react";
+import { TimeDeposit } from "@repo/fin-predict";
 
-import { RecurringDeposit } from "@repo/fin-predict";
-
-export default function MainPage() {
-  const [recurringDeposit, setRecurringDeposit] = useState<RecurringDeposit[]>(
-    []
-  );
-  const [timeDeposit, setTimeDeposit] = useState<FinRow[]>([]);
-  const [loan, setLoan] = useState<FinRow[]>([]);
-  const [stock, setStock] = useState<FinRow[]>([]);
+export default function Page() {
+  const [timeDeposit, setTimeDeposit] = useState<Partial<TimeDeposit>>({});
 
   return (
-    <div>
-      <button>적금 추가</button>
-      <button>예금 추가</button>
-      <button>대출 추가</button>
-      <button>주식 추가</button>
-    </div>
+    <AppShell padding="md">
+      <AppShell.Main>
+        <Flex justify={"center"}>
+          <Flex maw={736} direction={"column"} w={"100%"}>
+            <Flex justify={"space-between"} align={"center"}>
+              <Title order={3} size="xl">
+                현재 총 자산
+              </Title>
+              <Title order={3} size="xl">
+                <NumberFormatter
+                  value={timeDeposit.amount ?? 0}
+                  suffix="원"
+                  thousandSeparator
+                />
+              </Title>
+            </Flex>
+
+            <Space h="md" />
+
+            <Stack>
+              <CollapsibleAssetContainer title={"예금"}>
+                <TimeDepositForm onChange={setTimeDeposit} />
+              </CollapsibleAssetContainer>
+              <CollapsibleAssetContainer title={"적금"}>
+                <NumberInput />
+              </CollapsibleAssetContainer>
+              <CollapsibleAssetContainer title={"주식"}>
+                <NumberInput />
+              </CollapsibleAssetContainer>
+            </Stack>
+          </Flex>
+        </Flex>
+      </AppShell.Main>
+    </AppShell>
   );
 }
-
-// export default function MainPage() {
-//   const [model, setModel] = useState<FinModel>({
-//     id: uuidv4(),
-//     name: "",
-//     timeRange: ["2025-01", "2025-12"],
-//   });
-//   const [drivers, setDrivers] = useState<FinDriver[]>([]);
-//   const [rows, setRows] = useState<FinRow[]>([]);
-
-//   const [cellValues, setCellValues] = useState<string[][]>([]);
-
-//   const finFormulaManager = useMemo(() => {
-//     return new FinFormulaTableManager(model);
-//   }, [model]);
-
-//   useEffect(() => {
-//     finFormulaManager.setFinContents({
-//       rows,
-//       drivers,
-//     });
-
-//     setCellValues(finFormulaManager.getCellValues());
-//     // setAppliedTimeSegmentIds(finFormulaManager.getAppliedTimeSegmentIds(rows));
-//   }, [drivers, finFormulaManager, rows]);
-
-//   return (
-//     <div>
-//       <div>
-//         <button
-//           onClick={() =>
-//             setDrivers((prev) => [
-//               ...prev,
-//               {
-//                 id: uuidv4(),
-//                 name: "",
-//                 value: Math.random().toString(),
-//                 format: { type: "number" },
-//                 modelId: model.id,
-//                 order: prev.length,
-//               },
-//             ])
-//           }
-//         >
-//           add driver
-//         </button>
-//         <button
-//           onClick={() =>
-//             setRows((prev) => [
-//               ...prev,
-//               makeRandomRow(drivers, model.id, prev.length),
-//             ])
-//           }
-//         >
-//           add row
-//         </button>
-//       </div>
-
-//       <div>
-//         model
-//         <pre>{JSON.stringify(model, null, 2)}</pre>
-//       </div>
-
-//       <div>
-//         drivers
-//         <pre>{JSON.stringify(drivers, null, 2)}</pre>
-//       </div>
-
-//       <div>
-//         rows
-//         <pre>{JSON.stringify(rows, null, 2)}</pre>
-//       </div>
-
-//       <div>
-//         cell values
-//         <pre>{JSON.stringify(cellValues, null, 2)}</pre>
-//       </div>
-//     </div>
-//   );
-// }
-
-// const makeRandomRow = (
-//   drivers: FinDriver[],
-//   modelId: string,
-//   index: number
-// ): FinRow => {
-//   const id = uuidv4();
-//   return {
-//     id,
-//     name: "",
-//     order: index,
-//     format: { type: "number" },
-//     modelId: modelId,
-//     timeSegments: [
-//       {
-//         id: uuidv4(),
-//         formula: "1",
-//         timeRange: ["2025-01", "2025-12"],
-//         rowId: id,
-//         order: 0,
-//       },
-//       {
-//         id: uuidv4(),
-//         formula: drivers[0] ? `={{${drivers[0]?.id}}} + {{${id},x-1}}` : "1",
-//         timeRange: ["2025-01", "2025-12"],
-//         rowId: id,
-//         order: 1,
-//       },
-//     ],
-//   };
-// };

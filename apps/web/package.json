@@ -13,10 +13,12 @@
   "dependencies": {
     "@electric-sql/react": "1.0.0-beta.1",
     "@mantine/core": "^7.16.2",
+    "@mantine/form": "^7.16.2",
     "@mantine/hooks": "^7.16.2",
     "@repo/fin-core": "workspace:*",
     "@repo/fin-predict": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@tabler/icons-react": "^3.29.0",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
