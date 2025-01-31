@@ -12,10 +12,14 @@ import {
 import CollapsibleAssetContainer from "../components/CollapsibleAssetContainer";
 import TimeDepositForm from "../components/TimeDepositForm";
 import { useState } from "react";
-import { TimeDeposit } from "@repo/fin-predict";
+import { RecurringDeposit, TimeDeposit } from "@repo/fin-predict";
+import RecurringDepositForm from "../components/RecurringDepositForm";
 
 export default function Page() {
   const [timeDeposit, setTimeDeposit] = useState<Partial<TimeDeposit>>({});
+  const [recurringDeposit, setRecurringDeposit] = useState<
+    Partial<RecurringDeposit>
+  >({});
 
   return (
     <AppShell padding="md">
@@ -28,7 +32,9 @@ export default function Page() {
               </Title>
               <Title order={3} size="xl">
                 <NumberFormatter
-                  value={timeDeposit.amount ?? 0}
+                  value={
+                    (timeDeposit.amount ?? 0) + (recurringDeposit.amount ?? 0)
+                  }
                   suffix="원"
                   thousandSeparator
                 />
@@ -42,7 +48,7 @@ export default function Page() {
                 <TimeDepositForm onChange={setTimeDeposit} />
               </CollapsibleAssetContainer>
               <CollapsibleAssetContainer title={"적금"}>
-                <NumberInput />
+                <RecurringDepositForm onChange={setRecurringDeposit} />
               </CollapsibleAssetContainer>
               <CollapsibleAssetContainer title={"주식"}>
                 <NumberInput />
