@@ -4,7 +4,6 @@ import {
   AppShell,
   Flex,
   NumberFormatter,
-  NumberInput,
   Space,
   Stack,
   Title,
@@ -12,14 +11,23 @@ import {
 import CollapsibleAssetContainer from "../components/CollapsibleAssetContainer";
 import TimeDepositForm from "../components/TimeDepositForm";
 import { useState } from "react";
-import { RecurringDeposit, TimeDeposit } from "@repo/fin-predict";
+import { RecurringDeposit, Stock, TimeDeposit } from "@repo/fin-predict";
 import RecurringDepositForm from "../components/RecurringDepositForm";
+import StockForm from "../components/StockForm";
+import { sum } from "es-toolkit";
 
 export default function Page() {
   const [timeDeposit, setTimeDeposit] = useState<Partial<TimeDeposit>>({});
   const [recurringDeposit, setRecurringDeposit] = useState<
     Partial<RecurringDeposit>
   >({});
+  const [stock, setStock] = useState<Partial<Stock>>();
+
+  const totalAssets = sum([
+    timeDeposit?.amount ?? 0,
+    recurringDeposit?.amount ?? 0,
+    stock?.amount ?? 0,
+  ]);
 
   return (
     <AppShell padding="md">
@@ -32,9 +40,7 @@ export default function Page() {
               </Title>
               <Title order={3} size="xl">
                 <NumberFormatter
-                  value={
-                    (timeDeposit.amount ?? 0) + (recurringDeposit.amount ?? 0)
-                  }
+                  value={totalAssets}
                   suffix="원"
                   thousandSeparator
                 />
@@ -51,7 +57,7 @@ export default function Page() {
                 <RecurringDepositForm onChange={setRecurringDeposit} />
               </CollapsibleAssetContainer>
               <CollapsibleAssetContainer title={"주식"}>
-                <NumberInput />
+                <StockForm onChange={setStock} />
               </CollapsibleAssetContainer>
             </Stack>
           </Flex>
