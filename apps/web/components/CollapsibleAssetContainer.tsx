@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function CollapsibleAssetContainer({ title, children }: Props) {
-  const [opened, { toggle }] = useDisclosure(false);
+  const [opened, { toggle }] = useDisclosure(true);
 
   return (
     <Flex direction={"column"}>
