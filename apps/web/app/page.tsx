@@ -92,6 +92,7 @@ export default function Page() {
                   ]}
                   tickLine="y"
                   dataKey={"label"}
+                  valueFormatter={(value) => formatKoreanCurrency(value)}
                 />
               </Flex>
             </>
