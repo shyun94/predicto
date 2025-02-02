@@ -10,13 +10,14 @@ import {
 } from "@mantine/core";
 import CollapsibleAssetContainer from "../components/CollapsibleAssetContainer";
 import TimeDepositForm from "../components/TimeDepositForm";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { RecurringDeposit, Stock, TimeDeposit } from "@repo/fin-predict";
 import RecurringDepositForm from "../components/RecurringDepositForm";
 import StockForm from "../components/StockForm";
 import { sum } from "es-toolkit";
 import getExpectedStock from "../../../domains/fin-predict/src/calculator/getExpectedStock";
 import formatKoreanCurrency from "../utils/formatKoreanCurrency";
+import { BarChart } from "@mantine/charts";
 
 export default function Page() {
   const [timeDeposit, setTimeDeposit] = useState<Partial<TimeDeposit>>({});
@@ -30,6 +31,17 @@ export default function Page() {
     recurringDeposit?.amount ?? 0,
     stock?.amount ?? 0,
   ]);
+
+  const result = isStockNotPartial(stock)
+    ? [
+        { label: "1년후", value: getExpectedStock({ stock, afterYear: 1 }) },
+        { label: "5년후", value: getExpectedStock({ stock, afterYear: 5 }) },
+        { label: "10년후", value: getExpectedStock({ stock, afterYear: 10 }) },
+        { label: "20년후", value: getExpectedStock({ stock, afterYear: 20 }) },
+        { label: "30년후", value: getExpectedStock({ stock, afterYear: 30 }) },
+        { label: "40년후", value: getExpectedStock({ stock, afterYear: 40 }) },
+      ]
+    : undefined;
 
   return (
     <AppShell padding="md">
@@ -63,49 +75,27 @@ export default function Page() {
               </CollapsibleAssetContainer>
             </Stack>
           </Flex>
-
-          <Flex maw={736} direction={"column"} w={"100%"}>
-            {isStockNotPartial(stock) && (
-              <>
-                <div>
-                  1년뒤:{" "}
-                  {formatKoreanCurrency(
-                    getExpectedStock({ stock, afterYear: 1 })
-                  )}
-                </div>
-                <div>
-                  5년뒤:{" "}
-                  {formatKoreanCurrency(
-                    getExpectedStock({ stock, afterYear: 5 })
-                  )}
-                </div>
-                <div>
-                  10년뒤:{" "}
-                  {formatKoreanCurrency(
-                    getExpectedStock({ stock, afterYear: 10 })
-                  )}
-                </div>
-                <div>
-                  20년뒤:{" "}
-                  {formatKoreanCurrency(
-                    getExpectedStock({ stock, afterYear: 20 })
-                  )}
-                </div>
-                <div>
-                  30년뒤:{" "}
-                  {formatKoreanCurrency(
-                    getExpectedStock({ stock, afterYear: 30 })
-                  )}
-                </div>
-                <div>
-                  40년뒤:{" "}
-                  {formatKoreanCurrency(
-                    getExpectedStock({ stock, afterYear: 40 })
-                  )}
-                </div>
-              </>
-            )}
-          </Flex>
+          {result && (
+            <>
+              <Flex maw={736} direction={"column"} w={"100%"}>
+                {result.map((n) => (
+                  <div key={n.label}>
+                    {n.label}: {formatKoreanCurrency(n.value)}
+                  </div>
+                ))}
+                <Space h="md" />
+                <BarChart
+                  h={300}
+                  data={result}
+                  series={[
+                    { name: "value", color: "indigo", label: "예상 금액" },
+                  ]}
+                  tickLine="y"
+                  dataKey={"label"}
+                />
+              </Flex>
+            </>
+          )}
         </Flex>
       </AppShell.Main>
     </AppShell>
