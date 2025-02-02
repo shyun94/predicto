@@ -15,13 +15,14 @@ import { RecurringDeposit, Stock, TimeDeposit } from "@repo/fin-predict";
 import RecurringDepositForm from "../components/RecurringDepositForm";
 import StockForm from "../components/StockForm";
 import { sum } from "es-toolkit";
+import getExpectedStock from "../../../domains/fin-predict/src/calculator/getExpectedStock";
 
 export default function Page() {
   const [timeDeposit, setTimeDeposit] = useState<Partial<TimeDeposit>>({});
   const [recurringDeposit, setRecurringDeposit] = useState<
     Partial<RecurringDeposit>
   >({});
-  const [stock, setStock] = useState<Partial<Stock>>();
+  const [stock, setStock] = useState<Partial<Stock>>({});
 
   const totalAssets = sum([
     timeDeposit?.amount ?? 0,
@@ -50,19 +51,44 @@ export default function Page() {
             <Space h="md" />
 
             <Stack>
-              <CollapsibleAssetContainer title={"예금"}>
+              {/* <CollapsibleAssetContainer title={"예금"}>
                 <TimeDepositForm onChange={setTimeDeposit} />
               </CollapsibleAssetContainer>
               <CollapsibleAssetContainer title={"적금"}>
                 <RecurringDepositForm onChange={setRecurringDeposit} />
-              </CollapsibleAssetContainer>
+              </CollapsibleAssetContainer> */}
               <CollapsibleAssetContainer title={"주식"}>
                 <StockForm onChange={setStock} />
               </CollapsibleAssetContainer>
             </Stack>
           </Flex>
         </Flex>
+
+        <Flex direction={"column"}>
+          {isStockNotPartial(stock) && (
+            <>
+              <div>1년뒤: {getExpectedStock({ stock, afterYear: 1 })}</div>
+              <div>5년뒤: {getExpectedStock({ stock, afterYear: 5 })}</div>
+              <div>10년뒤: {getExpectedStock({ stock, afterYear: 10 })}</div>
+              <div>20년뒤: {getExpectedStock({ stock, afterYear: 20 })}</div>
+              <div>30년뒤: {getExpectedStock({ stock, afterYear: 30 })}</div>
+              <div>40년뒤: {getExpectedStock({ stock, afterYear: 40 })}</div>
+            </>
+          )}
+        </Flex>
       </AppShell.Main>
     </AppShell>
   );
 }
+
+const isStockNotPartial = (stock: Partial<Stock>): stock is Stock => {
+  if (
+    stock.id &&
+    stock.amount !== undefined &&
+    stock.interestRate !== undefined &&
+    stock.recurringAmount !== undefined
+  ) {
+    return true;
+  }
+  return false;
+};

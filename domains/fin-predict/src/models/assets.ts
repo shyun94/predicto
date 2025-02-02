@@ -27,7 +27,7 @@ export type Loan = {
 /** @description 주식 */
 export type Stock = {
   id: string;
-  timeRange: TimeRange;
   amount: number;
+  recurringAmount: number;
   interestRate: number;
 };

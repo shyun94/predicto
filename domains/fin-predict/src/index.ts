@@ -1,1 +1,2 @@
-export * from "./models/assets.js";
+export * from "./models/assets";
+export * from "./calculator/getExpectedStock";

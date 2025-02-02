@@ -10,9 +10,10 @@ export default function StockForm({ onChange }: Props) {
   const form = useForm<Partial<Stock>>({
     mode: "uncontrolled",
     initialValues: {
+      id: "asdf",
       amount: 0,
+      recurringAmount: 0,
       interestRate: 1,
-      timeRange: ["2024-01", "2024-12"],
     },
     validate: {},
     onValuesChange: (values) => {
@@ -25,6 +26,12 @@ export default function StockForm({ onChange }: Props) {
       <NumberInput
         thousandSeparator
         label="예치 금액"
+        suffix="원"
+        {...form.getInputProps("amount")}
+      />
+      <NumberInput
+        thousandSeparator
+        label="월 납입 금액"
         suffix="원"
         {...form.getInputProps("amount")}
       />
