@@ -16,6 +16,7 @@ import RecurringDepositForm from "../components/RecurringDepositForm";
 import StockForm from "../components/StockForm";
 import { sum } from "es-toolkit";
 import getExpectedStock from "../../../domains/fin-predict/src/calculator/getExpectedStock";
+import formatKoreanCurrency from "../utils/formatKoreanCurrency";
 
 export default function Page() {
   const [timeDeposit, setTimeDeposit] = useState<Partial<TimeDeposit>>({});
@@ -33,7 +34,7 @@ export default function Page() {
   return (
     <AppShell padding="md">
       <AppShell.Main>
-        <Flex justify={"center"}>
+        <Flex justify={"center"} direction={"column"}>
           <Flex maw={736} direction={"column"} w={"100%"}>
             <Flex justify={"space-between"} align={"center"}>
               <Title order={3} size="xl">
@@ -62,19 +63,49 @@ export default function Page() {
               </CollapsibleAssetContainer>
             </Stack>
           </Flex>
-        </Flex>
 
-        <Flex direction={"column"}>
-          {isStockNotPartial(stock) && (
-            <>
-              <div>1년뒤: {getExpectedStock({ stock, afterYear: 1 })}</div>
-              <div>5년뒤: {getExpectedStock({ stock, afterYear: 5 })}</div>
-              <div>10년뒤: {getExpectedStock({ stock, afterYear: 10 })}</div>
-              <div>20년뒤: {getExpectedStock({ stock, afterYear: 20 })}</div>
-              <div>30년뒤: {getExpectedStock({ stock, afterYear: 30 })}</div>
-              <div>40년뒤: {getExpectedStock({ stock, afterYear: 40 })}</div>
-            </>
-          )}
+          <Flex maw={736} direction={"column"} w={"100%"}>
+            {isStockNotPartial(stock) && (
+              <>
+                <div>
+                  1년뒤:{" "}
+                  {formatKoreanCurrency(
+                    getExpectedStock({ stock, afterYear: 1 })
+                  )}
+                </div>
+                <div>
+                  5년뒤:{" "}
+                  {formatKoreanCurrency(
+                    getExpectedStock({ stock, afterYear: 5 })
+                  )}
+                </div>
+                <div>
+                  10년뒤:{" "}
+                  {formatKoreanCurrency(
+                    getExpectedStock({ stock, afterYear: 10 })
+                  )}
+                </div>
+                <div>
+                  20년뒤:{" "}
+                  {formatKoreanCurrency(
+                    getExpectedStock({ stock, afterYear: 20 })
+                  )}
+                </div>
+                <div>
+                  30년뒤:{" "}
+                  {formatKoreanCurrency(
+                    getExpectedStock({ stock, afterYear: 30 })
+                  )}
+                </div>
+                <div>
+                  40년뒤:{" "}
+                  {formatKoreanCurrency(
+                    getExpectedStock({ stock, afterYear: 40 })
+                  )}
+                </div>
+              </>
+            )}
+          </Flex>
         </Flex>
       </AppShell.Main>
     </AppShell>

@@ -5,7 +5,7 @@ interface Params {
   afterYear: number;
 }
 
-export default function getExpectedStock({ stock, afterYear }: Params): bigint {
+export default function getExpectedStock({ stock, afterYear }: Params): number {
   const { amount, recurringAmount, interestRate } = stock;
   const rate = BigInt(Math.round(interestRate * 100)); // Convert to integer to avoid floating-point issues
   const scale = BigInt(10000); // Scaling factor for precision
@@ -24,7 +24,7 @@ export default function getExpectedStock({ stock, afterYear }: Params): bigint {
   }
 
   // Total future value
-  return futureValueInitial + futureValueRecurring;
+  return Number(futureValueInitial + futureValueRecurring);
 }
 
 // Helper function for exponentiation with BigInt
