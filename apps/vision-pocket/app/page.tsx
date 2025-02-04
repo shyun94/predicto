@@ -34,12 +34,12 @@ export default function Page() {
 
   const result = isStockNotPartial(stock)
     ? [
-        { label: "1년후", value: getExpectedStock({ stock, afterYear: 1 }) },
-        { label: "5년후", value: getExpectedStock({ stock, afterYear: 5 }) },
-        { label: "10년후", value: getExpectedStock({ stock, afterYear: 10 }) },
-        { label: "20년후", value: getExpectedStock({ stock, afterYear: 20 }) },
-        { label: "30년후", value: getExpectedStock({ stock, afterYear: 30 }) },
-        { label: "40년후", value: getExpectedStock({ stock, afterYear: 40 }) },
+        { label: "1년후", ...getExpectedStock({ stock, afterYear: 1 }) },
+        { label: "5년후", ...getExpectedStock({ stock, afterYear: 5 }) },
+        { label: "10년후", ...getExpectedStock({ stock, afterYear: 10 }) },
+        { label: "20년후", ...getExpectedStock({ stock, afterYear: 20 }) },
+        { label: "30년후", ...getExpectedStock({ stock, afterYear: 30 }) },
+        { label: "40년후", ...getExpectedStock({ stock, afterYear: 40 }) },
       ]
     : undefined;
 
@@ -80,7 +80,7 @@ export default function Page() {
               <Flex maw={736} direction={"column"} w={"100%"}>
                 {result.map((n) => (
                   <div key={n.label}>
-                    {n.label}: {formatKoreanCurrency(n.value)}
+                    {n.label}: {formatKoreanCurrency(n.total)}
                   </div>
                 ))}
                 <Space h="md" />
