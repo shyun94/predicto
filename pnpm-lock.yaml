@@ -125,7 +125,7 @@ importers:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
       recharts:
-        specifier: '2'
+        specifier: ^2.15.1
         version: 2.15.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       uuid:
         specifier: ^11.0.3
