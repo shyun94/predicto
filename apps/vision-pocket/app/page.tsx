@@ -1,18 +1,8 @@
 "use client";
 
-import {
-  AppShell,
-  Flex,
-  NumberFormatter,
-  Space,
-  Stack,
-  Title,
-} from "@mantine/core";
-import CollapsibleAssetContainer from "../components/CollapsibleAssetContainer";
-import TimeDepositForm from "../components/TimeDepositForm";
-import { Fragment, useState } from "react";
+import { AppShell, Button, Flex, Space, Stack } from "@mantine/core";
+import { useState } from "react";
 import { RecurringDeposit, Stock, TimeDeposit } from "@repo/fin-predict";
-import RecurringDepositForm from "../components/RecurringDepositForm";
 import StockForm from "../components/StockForm";
 import { sum } from "es-toolkit";
 import getExpectedStock from "../../../domains/fin-predict/src/calculator/getExpectedStock";
@@ -28,17 +18,7 @@ import {
 } from "recharts";
 
 export default function Page() {
-  const [timeDeposit, setTimeDeposit] = useState<Partial<TimeDeposit>>({});
-  const [recurringDeposit, setRecurringDeposit] = useState<
-    Partial<RecurringDeposit>
-  >({});
   const [stock, setStock] = useState<Partial<Stock>>({});
-
-  const totalAssets = sum([
-    timeDeposit?.amount ?? 0,
-    recurringDeposit?.amount ?? 0,
-    stock?.amount ?? 0,
-  ]);
 
   const result = isStockNotPartial(stock)
     ? [
@@ -61,33 +41,30 @@ export default function Page() {
       <AppShell.Main>
         <Flex justify={"center"} direction={"column"}>
           <Flex maw={736} direction={"column"} w={"100%"}>
-            <Flex justify={"space-between"} align={"center"}>
-              <Title order={3} size="xl">
-                현재 총 자산
-              </Title>
-              <Title order={3} size="xl">
-                <NumberFormatter
-                  value={totalAssets}
-                  suffix="원"
-                  thousandSeparator
-                />
-              </Title>
-            </Flex>
-
             <Space h="md" />
 
             <Stack>
-              {/* <CollapsibleAssetContainer title={"예금"}>
-                <TimeDepositForm onChange={setTimeDeposit} />
-              </CollapsibleAssetContainer>
-              <CollapsibleAssetContainer title={"적금"}>
-                <RecurringDepositForm onChange={setRecurringDeposit} />
-              </CollapsibleAssetContainer> */}
-              <CollapsibleAssetContainer title={"주식"}>
-                <StockForm onChange={setStock} />
-              </CollapsibleAssetContainer>
+              <StockForm onChange={setStock} />
             </Stack>
           </Flex>
+          <Space h="md" />
+
+          <Button
+            pos="fixed"
+            bottom={0}
+            left={0}
+            right={0}
+            h={60}
+            style={{
+              zIndex: 1000,
+              paddingBottom: "env(safe-area-inset-bottom)",
+            }}
+            size="xl"
+            color="dark.6"
+          >
+            계산하기
+          </Button>
+
           {result && (
             <>
               <Flex maw={736} direction={"column"} w={"100%"}>
