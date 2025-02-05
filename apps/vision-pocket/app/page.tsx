@@ -41,10 +41,19 @@ export default function Page() {
   ]);
 
   const result = isStockNotPartial(stock)
-    ? Array.from({ length: 8 }, (_, i) => ({
-        label: `${(i + 1) * 5}년후`,
-        ...getExpectedStock({ stock, afterYear: (i + 1) * 5 }),
-      }))
+    ? [
+        { label: "1년후", ...getExpectedStock({ stock, afterYear: 1 }) },
+        { label: "2년후", ...getExpectedStock({ stock, afterYear: 2 }) },
+        { label: "3년후", ...getExpectedStock({ stock, afterYear: 3 }) },
+        { label: "5년후", ...getExpectedStock({ stock, afterYear: 5 }) },
+        { label: "10년후", ...getExpectedStock({ stock, afterYear: 10 }) },
+        { label: "15년후", ...getExpectedStock({ stock, afterYear: 15 }) },
+        { label: "20년후", ...getExpectedStock({ stock, afterYear: 20 }) },
+        { label: "25년후", ...getExpectedStock({ stock, afterYear: 25 }) },
+        { label: "30년후", ...getExpectedStock({ stock, afterYear: 30 }) },
+        { label: "35년후", ...getExpectedStock({ stock, afterYear: 35 }) },
+        { label: "40년후", ...getExpectedStock({ stock, afterYear: 40 }) },
+      ]
     : undefined;
 
   return (
