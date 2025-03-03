@@ -1,7 +1,6 @@
 import { FinRow } from "@repo/fin-core";
-import { Card, Table, Title, Button, Box, Flex } from "@mantine/core";
-import EditableText from "./EditableText";
-import { useState } from "react";
+import { Table, Title, Button, Box, Flex } from "@mantine/core";
+import { useState, useEffect } from "react";
 import EditRowDrawer from "./EditRowDrawer";
 
 interface RowAreaProps {
@@ -22,23 +21,49 @@ export default function RowArea({
   const [selectedRow, setSelectedRow] = useState<FinRow | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleNameChange = (rowId: string, newName: string) => {
-    if (onUpdateRow) {
-      const rowToUpdate = rows.find((row) => row.id === rowId);
-      if (rowToUpdate) {
-        onUpdateRow({
-          ...rowToUpdate,
-          name: newName,
-        });
+  // 컴포넌트 마운트 시 스크롤바 스타일 적용
+  useEffect(() => {
+    // 항상 스크롤바 공간을 확보하는 CSS 추가
+    const style = document.createElement("style");
+    style.textContent = `
+      body {
+        overflow-y: scroll;
       }
-    }
-  };
+      /* 웹킷 기반 브라우저에서 스크롤바 항상 표시 */
+      ::-webkit-scrollbar {
+        width: 10px;
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   const handleRowClick = (row: FinRow) => {
-    setSelectedRow(row);
-    setDrawerOpen(true);
-    if (onRowClick) {
-      onRowClick(row);
+    if (selectedRow && drawerOpen) {
+      // 이미 드로어가 열려있는 경우, 드로어를 닫고 약간의 지연 후 새 드로어 열기
+      setDrawerOpen(false);
+      setTimeout(() => {
+        setSelectedRow(row);
+        setDrawerOpen(true);
+        if (onRowClick) {
+          onRowClick(row);
+        }
+      }, 300); // 트랜지션 시간과 일치시킴
+    } else {
+      // 드로어가 닫혀있는 경우, 바로 열기
+      setSelectedRow(row);
+      setDrawerOpen(true);
+      if (onRowClick) {
+        onRowClick(row);
+      }
     }
   };
 
@@ -56,16 +81,7 @@ export default function RowArea({
   });
 
   return (
-    <Flex
-      direction="column"
-      gap="md"
-      style={{
-        flex: 1,
-        height: "100%",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
+    <Flex direction="column" style={flexContainerStyle}>
       <Flex justify="space-between" align="center">
         <Title order={3} mb="md">
           Rows
@@ -76,7 +92,6 @@ export default function RowArea({
         style={{
           ...tableContainerStyle,
           flex: 1,
-          position: "relative",
         }}
       >
         <div style={{ ...tableWrapperStyle, height: "100%" }}>
@@ -134,6 +149,14 @@ export default function RowArea({
   );
 }
 
+// 스타일 정의
+const flexContainerStyle: React.CSSProperties = {
+  flex: 1,
+  height: "100%",
+  position: "relative",
+  overflow: "hidden",
+};
+
 // 테이블 스타일
 const tableContainerStyle: React.CSSProperties = {
   width: "100%",
@@ -161,7 +184,10 @@ const tableHeadStyle: React.CSSProperties = {
 
 const tableBodyStyle: React.CSSProperties = {
   display: "block",
-  overflowY: "auto",
+  overflowY: "scroll", // auto 대신 scroll 사용
+  overflowX: "hidden",
   flex: 1,
-  paddingRight: "10px", // 스크롤바 공간 확보
+  paddingRight: "0", // 스크롤바 공간 확보 제거
+  scrollbarWidth: "thin", // Firefox용
+  scrollbarColor: "rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05)", // Firefox용
 };
