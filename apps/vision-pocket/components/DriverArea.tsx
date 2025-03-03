@@ -24,17 +24,10 @@ export default function DriverArea({
 
   return (
     <Flex direction="column" gap="md" w="300px">
-      <Title order={3} mb="md">
-        Drivers
-      </Title>
-      <Stack mb="sm">
-        {drivers.map((driver) => (
-          <DriverCard
-            key={driver.id}
-            driver={driver}
-            onUpdate={handleUpdateDriver}
-          />
-        ))}
+      <Flex justify="space-between" align="center">
+        <Title order={3} mb="md">
+          Drivers
+        </Title>
         <Button
           onClick={() =>
             onAddDriver({
@@ -49,6 +42,15 @@ export default function DriverArea({
         >
           드라이버 추가
         </Button>
+      </Flex>
+      <Stack mb="sm">
+        {drivers.map((driver) => (
+          <DriverCard
+            key={driver.id}
+            driver={driver}
+            onUpdate={handleUpdateDriver}
+          />
+        ))}
       </Stack>
     </Flex>
   );

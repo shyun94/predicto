@@ -1,6 +1,6 @@
 import { FinDriver } from "@repo/fin-core";
 import { useState } from "react";
-import { Card, Flex } from "@mantine/core";
+import { Card, Flex, Text } from "@mantine/core";
 import EditableText from "./EditableText";
 
 interface Props {
@@ -33,21 +33,27 @@ export default function DriverCard({ driver, onUpdate }: Props) {
   };
 
   return (
-    <Card shadow="sm" padding="md" radius="md" withBorder mb="sm">
-      <Flex align="center" mb="xs">
-        <strong style={{ width: "50px" }}>이름:</strong>
+    <Card shadow="xs" padding="xs" radius="sm" withBorder mb="xs" __size="xs">
+      <Flex align="center" mb="xs" gap="xs">
+        <Text size="xs" fw={500} style={{ width: "40px" }}>
+          이름:
+        </Text>
         <EditableText
           value={name}
           onChange={handleNameChange}
           placeholder="(이름 없음)"
+          style={{ fontSize: "12px" }}
         />
       </Flex>
-      <Flex align="center">
-        <strong style={{ width: "50px" }}>값:</strong>
+      <Flex align="center" gap="xs">
+        <Text size="xs" fw={500} style={{ width: "40px" }}>
+          값:
+        </Text>
         <EditableText
           value={value}
           onChange={handleValueChange}
           placeholder="(값 없음)"
+          style={{ fontSize: "12px" }}
         />
       </Flex>
     </Card>
