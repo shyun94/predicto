@@ -9,6 +9,8 @@ import {
 } from "@repo/fin-core";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect, useMemo, useState } from "react";
+import DriverArea from "../components/DriverArea";
+import RowArea from "../components/RowArea";
 
 export default function Page() {
   const [model, setModel] = useState<FinModel>({
@@ -38,25 +40,27 @@ export default function Page() {
   return (
     <AppShell>
       <AppShell.Main>
-        <Flex direction="column" gap="md">
+        <Flex direction="row" gap="md">
+          <Flex>
+            <DriverArea
+              model={model}
+              drivers={drivers}
+              onAddDriver={(newDriver) => {
+                setDrivers((prev) => [...prev, newDriver]);
+              }}
+              onUpdateDriver={(updatedDriver) => {
+                setDrivers((prev) =>
+                  prev.map((driver) =>
+                    driver.id === updatedDriver.id ? updatedDriver : driver
+                  )
+                );
+              }}
+            />
+          </Flex>
+          <Flex>
+            <RowArea rows={rows} onAddRow={() => {}} />
+          </Flex>
           <div>
-            <button
-              onClick={() =>
-                setDrivers((prev) => [
-                  ...prev,
-                  {
-                    id: uuidv4(),
-                    name: "",
-                    value: Math.random().toString(),
-                    format: { type: "number" },
-                    modelId: model.id,
-                    order: prev.length,
-                  },
-                ])
-              }
-            >
-              add driver
-            </button>
             <button
               onClick={() =>
                 setRows((prev) => [
@@ -72,11 +76,6 @@ export default function Page() {
           <div>
             model
             <pre>{JSON.stringify(model, null, 2)}</pre>
-          </div>
-
-          <div>
-            drivers
-            <pre>{JSON.stringify(drivers, null, 2)}</pre>
           </div>
 
           <div>
