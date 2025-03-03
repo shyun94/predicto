@@ -8,7 +8,7 @@ import {
   FinRow,
 } from "@repo/fin-core";
 import { v4 as uuidv4 } from "uuid";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import DriverArea from "../components/DriverArea";
 import RowArea from "../components/RowArea";
 
@@ -21,20 +21,16 @@ export default function Page() {
   const [drivers, setDrivers] = useState<FinDriver[]>([]);
   const [rows, setRows] = useState<FinRow[]>([]);
 
-  const [cellValues, setCellValues] = useState<string[][]>([]);
-
   const finFormulaManager = useMemo(() => {
     return new FinFormulaTableManager(model);
   }, [model]);
 
-  useEffect(() => {
+  const cellValues = useMemo(() => {
     finFormulaManager.setFinContents({
       rows,
       drivers,
     });
-
-    setCellValues(finFormulaManager.getCellValues());
-    // setAppliedTimeSegmentIds(finFormulaManager.getAppliedTimeSegmentIds(rows));
+    return finFormulaManager.getCellValues();
   }, [drivers, finFormulaManager, rows]);
 
   return (
