@@ -35,8 +35,8 @@ export default function Page() {
 
   return (
     <AppShell>
-      <AppShell.Main>
-        <Flex direction="row" gap="md">
+      <AppShell.Main style={{ height: "100vh" }}>
+        <Flex direction="row" gap="md" style={{ height: "100%" }}>
           <Flex>
             <DriverArea
               model={model}
@@ -53,36 +53,28 @@ export default function Page() {
               }}
             />
           </Flex>
-          <Flex>
-            <RowArea rows={rows} onAddRow={() => {}} />
-          </Flex>
-          <div>
-            <button
-              onClick={() =>
+          <Flex style={{ flex: 1, height: "100%" }}>
+            <RowArea
+              rows={rows}
+              cellValues={cellValues}
+              onAddRow={() => {
                 setRows((prev) => [
                   ...prev,
                   makeRandomRow(drivers, model.id, prev.length),
-                ])
-              }
-            >
-              add row
-            </button>
-          </div>
-
-          <div>
-            model
-            <pre>{JSON.stringify(model, null, 2)}</pre>
-          </div>
-
-          <div>
-            rows
-            <pre>{JSON.stringify(rows, null, 2)}</pre>
-          </div>
-
-          <div>
-            cell values
-            <pre>{JSON.stringify(cellValues, null, 2)}</pre>
-          </div>
+                ]);
+              }}
+              onUpdateRow={(updatedRow) => {
+                setRows((prev) =>
+                  prev.map((row) =>
+                    row.id === updatedRow.id ? updatedRow : row
+                  )
+                );
+              }}
+              onRowClick={(row) => {
+                console.log("Row clicked:", row);
+              }}
+            />
+          </Flex>
         </Flex>
       </AppShell.Main>
     </AppShell>
